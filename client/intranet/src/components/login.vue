@@ -20,7 +20,7 @@
 
     <div style="text-align: center; margin-top: 30px; margin-bottom: 30px">  
 
-        <button class="button is-rounded" id="entrar">Entrar</button>
+        <router-view class="button is-rounded" id="entrar">Entrar</router-view>
 
     </div>
       
