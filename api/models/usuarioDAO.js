@@ -10,7 +10,7 @@ class userDao {
             if(result.length == 0){
                 result = {msg: "Nenhum Usuário Cadastrado"};
             }else{
-                result;
+                return result;
             }
 
         } catch (error) {
@@ -69,7 +69,7 @@ class userDao {
         try {
             var result = await knex.select().where({nome : usuario, senha : senha}).table('usuarios');
 
-            console.log(result);
+           
             if(result.length > 0){
                 return {login : true}
             }else{

@@ -4,6 +4,10 @@ class home{
         res.send("API - Intranet")
     }
 
+    async validate(req, res){
+        res.send("okay");
+    }
+
 }
 
 module.exports = new home();

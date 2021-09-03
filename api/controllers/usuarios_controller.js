@@ -1,5 +1,8 @@
 var userDAO = require("../models/usuarioDAO");
 var crypto = require("bcrypt");
+var jwt = require('jsonwebtoken');
+
+var secret ="dfosgndfçsnnfsudgibfgsbgçfd";
 class Usuarios{
 
     async login(req,res){
@@ -19,18 +22,24 @@ class Usuarios{
 
                     var result2 = await userDAO.login(usuario, result[0].senha);
 
+                    console.log(result[0].nome);
+                    
+
                
                     if(result2.login == true){
-                        res.json({msg: "Seja bem vindo"})
+                    
+                        var token = jwt.sign({usuario : result[0].nome}, secret);
+                        res.json({token: token});
                     }else{
-                        res.json({msg: "Usuário ou senha Inválidos"})
+                        res.json({msg: false})
                     }
                    
                 }else{
-                    res.json({msg: "Usuário ou senha Inválidos"});
+                    res.status(406);
+                    res.json({msg: "false"});
                 }
             }else{
-                res.json({msg: "Usuário ou senha Inválidos"});
+                res.json({msg: "false"});
             }
 
         } catch (error) {
@@ -71,7 +80,8 @@ class Usuarios{
             var conexao = await userDAO.listarUsuarios();
 
           
-            return res.json(conexao);
+             res.json(conexao);
+            
 
 
             
