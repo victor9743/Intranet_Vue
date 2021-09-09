@@ -9,46 +9,45 @@ class Usuarios{
         
         var usuario = req.body.usuario;
         var senha = req.body.password;
+        console.log(req.body);
 
-        try {
-            
-            var result = await userDAO.buscarUsuario(usuario);
-
-            if(result.length >0){
-                var senhahash = await crypto.compare(senha, result[0].senha);
-                
-               
-                if(senhahash){
-
-                    var result2 = await userDAO.login(usuario, result[0].senha);
-
-                    console.log(result[0].nome);
-                    
-
-               
-                    if(result2.login == true){
-                    
-                        var token = jwt.sign({usuario : result[0].nome}, secret);
-                        res.json({token: token});
-                    }else{
-                        res.json({msg: false})
-                    }
-                   
-                }else{
-                    res.status(406);
-                    res.json({msg: "false"});
-                }
-            }else{
-                res.json({msg: "false"});
-            }
-
-        } catch (error) {
-            
-            res.status(500);
-            res.json(error);
-            
-        }
         
+
+                try {
+                    
+                    var result = await userDAO.buscarUsuario(usuario);
+
+                    if(result.length >0){
+                        var senhahash = await crypto.compare(senha, result[0].senha);
+                        
+                    
+                        if(senhahash){
+
+                            var result2 = await userDAO.login(usuario, result[0].senha);
+           
+                            if(result2.login == true){
+                            
+                                var token = jwt.sign({usuario : result[0].nome}, secret);
+                                res.json({token: token, msg: "true"});
+                            }else{
+                                res.json({msg: "false"})
+                            }
+                        
+                        }else{
+                          
+                            res.json({msg: "false"});
+                        }
+                    }else{
+                        res.json({msg: "false"});
+                    }
+
+                } catch (error) {
+                    
+                    res.status(500);
+                    res.json(error);
+                    
+                }
+    
         
 
     }
