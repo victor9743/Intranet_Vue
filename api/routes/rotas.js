@@ -11,9 +11,11 @@ var cookieControl = require('../middleware/tokenacess');
 
 // rota.get("/", indexController.index);
 rota.post("/login", userController.login);
-rota.post("/cadastrarUsuario", cookieControl, userController.newUsuario);
+rota.post("/usuarios", cookieControl, userController.newUsuario);
 rota.get("/usuarios", cookieControl, userController.listarUsuarios);
 rota.put("/usuarios", cookieControl, userController.editarUsuario);
+rota.delete("/usuarios", cookieControl, userController.removerUsuario);
 rota.post("/autenticar", cookieControl, indexController.validate );
+
 module.exports = rota;
 

@@ -1,5 +1,6 @@
 var knex= require("../database/db");
 var crypto = require("bcrypt");
+const res = require("express/lib/response");
 
 class userDao {
     
@@ -44,6 +45,7 @@ class userDao {
         
     }
     
+    
     async buscarUsuario(usuario){
 
         try {
@@ -63,6 +65,54 @@ class userDao {
     }
     async removerUsuario(id){
         
+        try {
+            var result = await knex.delete().where({id_usuario : id }).table('usuarios');
+            
+            console.log(result);
+            if(result == 1){
+                return {msg: true}
+            }else{
+                return {msg: false}
+            }
+          
+        } catch (error) {
+            return {msg : error};
+        }
+    }
+    async updateUSER(id, usuario, novasenha){
+
+        var hash = await crypto.hash(novasenha, 10);
+        
+        console.log(id, usuario, novasenha);
+
+        try {
+             await knex.update({nome: usuario , senha : hash}).where({id_usuario : id}).table('usuarios').then(data=>{
+               
+                return {msg : "Atualizado"}
+            }).catch(err=>{
+                return {msg: err};
+            })
+        } catch (error) {
+            return {msg : error}
+        }
+
+    }
+    async buscarID(id){
+        
+        try {
+            var result = await knex.select().where({id_usuario : id}).table('usuarios');
+
+            if(result.length > 0){
+                return {msg: true, usuario: result[0].nome, password: result[0].senha};      
+            }else{
+                return {msg: false};
+            }
+
+        } catch (error) {
+           
+            return error;
+        }
+
     }
 
     async login(usuario, senha){

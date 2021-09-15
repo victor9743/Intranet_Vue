@@ -1,20 +1,18 @@
 var userDAO = require("../models/usuarioDAO");
 var crypto = require("bcrypt");
 var jwt = require('jsonwebtoken');
+const usuarioDAO = require("../models/usuarioDAO");
 
-var secret ="dfosgndfçsnnfsudgibfgsbgçfd";
+var secret ="fa.jk[dsaf}ºsdf...,,hjkhliul;yurtyu/´p[ohjkg~~]´po§gujh$fg@yi";
 class Usuarios{
 
     async login(req,res){
         
         var usuario = req.body.usuario;
-        var senha = req.body.password;
-        console.log(req.body);
-
-        
+        var senha = req.body.password;     
 
                 try {
-                    
+                
                     var result = await userDAO.buscarUsuario(usuario);
 
                     if(result.length >0){
@@ -46,9 +44,7 @@ class Usuarios{
                     res.status(500);
                     res.json(error);
                     
-                }
-    
-        
+                }  
 
     }
 
@@ -77,23 +73,97 @@ class Usuarios{
          try{
 
             var conexao = await userDAO.listarUsuarios();
-
-          
+ 
              res.json(conexao);
-            
-
-
-            
-
-         }catch(error){
+       }catch(error){
             res.status(400);
              return res.json({msg: "erro"})
          }
     }
     async editarUsuario(req, res){
 
-        var {id , usuario , senha} = req.body;
+        // Pegar dados do req.body
+        var {id , usuario , ANTIGAsenha, NOVAsenha} = req.body;
+        
+ 
+        // verifiacar se o id está vazio ou undefined
+        if(id == "" || id == undefined || id[0]==" "){
+             res.json({msg : "erro"});
+         }else{
+            // verificar id 
+            try{
+                var result = await userDAO.buscarID(id);
+                
+                if(result.msg == true){
 
+                   
+                    if(usuario == "" || usuario == undefined || usuario[0] == " " ){
+                        usuario = result.usuario;
+                        
+    
+                    }
+                  
+                      
+                        // fazer comparação da senha recebida do req.body com o result.password
+                        var buscaPASS  = await crypto.compare(ANTIGAsenha, result.password);
+                     
+                        // caso o buscaPASS for true, entrará na primeira condição, caso contrário, entrará na segunda
+                        if(buscaPASS){
+                            if(NOVAsenha == "" || NOVAsenha == undefined || NOVAsenha[0] == " "){
+                            
+                                NOVAsenha = ANTIGAsenha;
+                            }
+                            
+                            try {
+                                var result = await usuarioDAO.updateUSER(id, usuario, NOVAsenha);
+
+                                res.json({msg: "Atualizado"});
+                            } catch (error) {
+                               res.json({msg: result.msg});
+                            }
+                            
+
+                        }else{
+                            res.json({msg: "erro buscaPASS"})
+                        }
+                        
+               
+                
+                }else{
+                    res.json({msg: "false"});
+                }
+
+            }catch(error){
+                res.send(error);
+                console.log(error);
+            }
+            
+
+        
+
+          }
+        
+
+
+    }
+
+    async removerUsuario(req,res){
+
+        var id = req.body.id;
+
+        if(id != undefined || id[0] != " " || id != ""){
+
+            var result = await usuarioDAO.removerUsuario(id);
+    
+            if(result.msg == true){
+                res.json({msg: "Ok"});
+            }else{
+                res.json({msg: false});
+            }
+
+        }else{
+            res.json({msg : "erro"})
+        }
 
     }
 }
