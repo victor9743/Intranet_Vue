@@ -1,7 +1,6 @@
 var userDAO = require("../models/usuarioDAO");
 var crypto = require("bcrypt");
 var jwt = require('jsonwebtoken');
-const usuarioDAO = require("../models/usuarioDAO");
 
 var secret ="fa.jk[dsaf}ºsdf...,,hjkhliul;yurtyu/´p[ohjkg~~]´po§gujh$fg@yi";
 class Usuarios{
@@ -115,7 +114,7 @@ class Usuarios{
                             }
                             
                             try {
-                                var result = await usuarioDAO.updateUSER(id, usuario, NOVAsenha);
+                                var result = await userDAO.updateUSER(id, usuario, NOVAsenha);
 
                                 res.json({msg: "Atualizado"});
                             } catch (error) {
@@ -153,7 +152,7 @@ class Usuarios{
 
         if(id != undefined || id[0] != " " || id != ""){
 
-            var result = await usuarioDAO.removerUsuario(id);
+            var result = await userDAO.removerUsuario(id);
     
             if(result.msg == true){
                 res.json({msg: "Ok"});

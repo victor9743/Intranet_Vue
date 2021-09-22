@@ -1,6 +1,6 @@
 var knex= require("../database/db");
 var crypto = require("bcrypt");
-const res = require("express/lib/response");
+
 
 class userDao {
     
