@@ -5,12 +5,15 @@ var indexController = require("../controllers/index_controller");
 var depController = require("../controllers/departamentos_controller");
 var arqController = require("../controllers/arquivos_controller");
 var chaController = require("../controllers/chamados_controller");
-var servController;
+var regController = require("../controllers/regioes_controller");
+var servController = require("../controllers/servicos_controller");
+var entranciaController = require("../controllers/entrancias_controller");
 
 
 // importando middleware
 
 var cookieControl = require('../middleware/tokenacess');
+const { updateArquivo } = require('../models/arquivoDAO');
 
 
 // rota.get("/", indexController.index);
@@ -45,8 +48,25 @@ rota.put("/chamados", cookieControl, chaController.editarChamado);
 rota.delete("/chamados", cookieControl, chaController.removerChamado);
 
 // servicos
+rota.get("/servicos", cookieControl, servController.listarSer);
+rota.post("/servicos", cookieControl, servController.newServico);
+rota.put("/servicos", cookieControl, servController.editarServico);
+rota.delete("/servicos", cookieControl, servController.removerServico);
 
 
+
+// Regiões
+rota.get("/regiao", cookieControl, regController.listarRegiao);
+rota.post("/regiao", cookieControl, regController.newRegiao);
+rota.put("/regiao", cookieControl, regController.editarRegiao);
+rota.delete("/regiao", cookieControl, regController.removerRegiao);
+
+
+// Entrâncias
+rota.get("/entrancias", cookieControl, entranciaController.listarEnt);
+rota.post("/entrancias", cookieControl, entranciaController.newEntrancia);
+rota.put("/entrancias", cookieControl, entranciaController.editarEntrancia);
+rota.delete("/entrancias", cookieControl, entranciaController.removerEntrancia);
 
 module.exports = rota;
 
